@@ -1,0 +1,24 @@
+0 WhiteNAlgNew1 O_C66_A0_P1_out Link20
+1 sin_lookupAlg19401 O_C250_A0_P1_out Link22
+2 ICSigma100In1 O_C366_A0_P1_out Link11 O_C366_A0_P2_out Link12
+3 EQ1940Invert1 I_C296_A0_P1_in Link22 O_C296_A0_P2_out Link10
+4 PinkFAlg1 I_C77_A0_P1_in Link20 O_C77_A0_P2_out Link14
+5 monoMuxSwSlew1 I_C82_A0_P2_in Link14 I_C82_A0_P3_in Link20 O_C82_A0_P1_out Link23
+6 EQ1940Invert2 I_C0_A0_P1_in Link23 O_C0_A0_P2_out Link13
+7 StMuxSwSlew1 I_C382_A0_P3_in Link22 I_C382_A0_P4_in Link10 I_C382_A0_P5_in Link23 I_C382_A0_P6_in Link13 I_C382_A0_P7_in Link11 I_C382_A0_P8_in Link12 O_C382_A0_P1_out Link21 O_C382_A0_P2_out Link19
+8 MuteNoSlewAlg2 I_C109_A0_P1_in Link19 O_C109_A0_P2_out Link7
+9 MuteNoSlewAlg4 I_C119_A0_P1_in Link19 O_C119_A0_P2_out Link1
+10 MuteNoSlewAlg3 I_C112_A0_P1_in Link21 O_C112_A0_P2_out Link6
+11 MuteNoSlewAlg1 I_C102_A0_P1_in Link21 O_C102_A0_P2_out Link4
+12 SingleCtrlMixer19402 I_C115_A0_P2_in Link6 I_C115_A0_P3_in Link1 O_C115_A0_P1_out Link5
+13 SingleCtrlMixer19401 I_C105_A0_P2_in Link4 I_C105_A0_P3_in Link7 O_C105_A0_P1_out Link0
+14 MultCtrlFracDelGrowFixedAlg1 I_C142_A0_P1_in Link0 O_C142_A0_P2_out Link8
+15 MultCtrlFracDelGrowFixedAlg2 I_C145_A0_P1_in Link5 O_C145_A0_P2_out Link9
+16 Gain1940AlgNS2 I_C157_A0_P1_in Link8 O_C157_A0_P2_out Link16
+17 Gain1940AlgNS1 I_C154_A0_P1_in Link9 O_C154_A0_P2_out Link18
+18 PEQ1Chan2 I_C3_A0_P1_in Link16 O_C3_A0_P2_out Link15
+19 PEQ1Chan3 I_C7_A0_P1_in Link18 O_C7_A0_P2_out Link17
+20 FIRFiltAlg1 I_C47_A0_P1_in Link15 O_C47_A0_P2_out Link3
+21 FIRFiltAlg2 I_C50_A0_P1_in Link17 O_C50_A0_P2_out Link2
+22 ICSigma100Out2 I_C45_A0_P1_in Link2
+23 ICSigma100Out1 I_C43_A0_P1_in Link3
