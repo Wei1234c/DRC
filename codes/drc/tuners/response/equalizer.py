@@ -1,12 +1,14 @@
 from autoeq.constants import DEFAULT_BASS_BOOST_GAIN, DEFAULT_BASS_BOOST_FC, DEFAULT_BASS_BOOST_Q
 from ...filters.peq import PEQs, np
 from ...measurements.frequency import Octave
+from ...sound import Channel
 
 
 
 class ResponseEqualizer:
 
     DEFAULT_FS = 48000
+    DEFAULT_FREQ_RESOLUTION = 10
     MAX_FILTERS = 10
     MAX_GAIN_dB = 12.0
     DEFAULT_Q = np.sqrt(2)
@@ -86,3 +88,27 @@ class ResponseEqualizer:
 
         measurement, _, _, _ = cls.get_peq_filters(measurement, compensation, *auto_eq_args, **auto_eq_kwargs)
         return measurement.get_eqapo_graphic_eq(file_path, fc, normalize)
+
+
+    @classmethod
+    def get_convolution_filter(cls, measurement, compensation,
+                               file_path,
+                               fs = DEFAULT_FS,
+                               f_res = DEFAULT_FREQ_RESOLUTION,
+                               linear_phase = False,
+                               normalize = False,
+                               nchannels = 2,
+                               *auto_eq_args, **auto_eq_kwargs):
+
+        measurement, _, _, _ = cls.get_peq_filters(measurement, compensation, *auto_eq_args, **auto_eq_kwargs)
+        func = measurement.linear_phase_impulse_response if linear_phase else \
+            measurement.minimum_phase_impulse_response
+        ir = func(fs = fs, f_res = f_res, normalize = normalize)
+        ch = Channel(ir, framerate = fs)
+
+        import soundfile as sf
+
+        irs = np.tile(ir, (nchannels, 1)).T
+        sf.write(file_path, irs, fs, "PCM_16")
+
+        return measurement, ch

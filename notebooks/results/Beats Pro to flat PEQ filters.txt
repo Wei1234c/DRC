@@ -1,0 +1,11 @@
+Filter Settings file
+Filter  No 0/1 TYPE     Fc_Hz          Gain_dB        Q
+Filter  1: ON  PK       Fc   60.6 Hz  Gain  4.655 dB  Q  0.749
+Filter  2: ON  PK       Fc   106.9 Hz  Gain  6.083 dB  Q  1.101
+Filter  3: ON  PK       Fc   203.1 Hz  Gain  -1.469 dB  Q  1.332
+Filter  4: ON  PK       Fc   205.3 Hz  Gain  -2.486 dB  Q  0.982
+Filter  5: ON  PK       Fc   1161.4 Hz  Gain  0.849 dB  Q  2.608
+Filter  6: ON  PK       Fc   1536.0 Hz  Gain  1.116 dB  Q  2.375
+Filter  7: ON  PK       Fc   2309.1 Hz  Gain  -1.846 dB  Q  3.065
+Filter  8: ON  PK       Fc   5037.4 Hz  Gain  -5.733 dB  Q  1.664
+Filter  9: ON  PK       Fc   11930.6 Hz  Gain  5.741 dB  Q  0.548
