@@ -6,10 +6,12 @@ from matplotlib import pyplot as plt
 class Octave:
     FREQ_BASE = 1e3
     FREQ_LIMS = (20, 20000)
+    FC_5_BANDs = (100, 320, 1000, 3200, 10000)
     FC_10_BANDs = (31.25, 62.5, 125, 250, 500, 1000, 2000, 4000, 8000, 16000)
     FC_15_BANDs = (25, 40, 63, 100, 160, 250, 400, 630, 1000, 1600, 2500, 4000, 6300, 10000, 16000)
     FC_31_BANDs = (20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250, 315, 400, 500, 630, 800, 1000,
                    1250, 1600, 2000, 2500, 3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000)
+
 
     @classmethod
     def get_octave_by_frac(cls, octave_frac = 3,
@@ -32,7 +34,7 @@ class Octave:
 
 
     @classmethod
-    def get_octave_by_bands(cls, n_bands = 5, freq_min = min(FREQ_LIMS), freq_max = max(FREQ_LIMS)):
+    def get_octave_by_bands(cls, n_bands = 10, freq_min = min(FREQ_LIMS), freq_max = max(FREQ_LIMS)):
         octave_min = np.log2(freq_min)
         octave_max = np.log2(freq_max)
         octave_unit = (octave_max - octave_min) / (n_bands - 1)
