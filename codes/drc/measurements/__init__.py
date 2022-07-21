@@ -184,6 +184,8 @@ class Sampler:
     CHUNK_SIZE = 1024 * 20
     FREQ_LIMITS = (20, 20000)
     MEAN_SPL_FREQ_LIMITS = (200, 6000)
+    MEAN_SPL_N_SAMPLINGS = 5
+    DEFAULT_N_SAMPLINGS = 10
 
     SENSITIVITY_dB = -42.0
     GAIN_dB = 18.0
@@ -192,11 +194,17 @@ class Sampler:
     @staticmethod
     def _get_samples(input_device_idx = None, chunk_size = CHUNK_SIZE,
                      nchannels = 1, idx_channel = 0,
-                     framerate = DEFAULT_FS, sample_width = SAMPLE_WIDTH):
+                     framerate = DEFAULT_FS, sample_width = SAMPLE_WIDTH, n_samplings = 1):
+        channels = []
+
         with InputDevice(device_index = input_device_idx, nchannels = nchannels, chunk_size = chunk_size,
                          framerate = framerate, sample_width = sample_width) as mic:
-            data = mic.read_chunk()
-            return Channel(data[idx_channel], framerate = framerate)
+
+            for _ in range(n_samplings):
+                data = mic.read_chunk()
+                channels.append(Channel(data[idx_channel], framerate = framerate))
+
+        return channels
 
 
     @classmethod
@@ -204,17 +212,22 @@ class Sampler:
               nchannels = 1, idx_channel = 0,
               freq_lims = FREQ_LIMITS,
               sensitivity_dB = SENSITIVITY_dB, gain_dB = GAIN_dB,
+              n_samplings = 1,
               *args, **kwargs):
-        ch = cls._get_samples(input_device_idx = input_device_idx,
-                              nchannels = nchannels, idx_channel = idx_channel,
-                              framerate = framerate,
-                              *args, **kwargs)
-        sp = ch.make_spectrum(full = False)
-        dBSPLs = Amplitude.to_dBSPL(sp.amps / len(sp.amps), sensitivity_dB, gain_dB)
 
-        idx = np.where((sp.fs >= min(freq_lims)) & (sp.fs <= max(freq_lims)))
+        channels = cls._get_samples(input_device_idx = input_device_idx,
+                                    nchannels = nchannels, idx_channel = idx_channel,
+                                    framerate = framerate, n_samplings = n_samplings,
+                                    *args, **kwargs)
 
-        return sp.fs[idx], dBSPLs[idx], ch
+        spectrums = tuple(ch.make_spectrum(full = False) for ch in channels)
+        amps = np.mean(np.stack([sp.amps for sp in spectrums]), axis = 0)
+        dBSPLs = Amplitude.to_dBSPL(amps / len(amps), sensitivity_dB, gain_dB)
+
+        fs = spectrums[0].fs
+        idx = np.where((fs >= min(freq_lims)) & (fs <= max(freq_lims)))
+
+        return fs[idx], dBSPLs[idx], channels
 
 
     @classmethod
@@ -224,13 +237,14 @@ class Sampler:
                                sensitivity_dB = SENSITIVITY_dB, gain_dB = GAIN_dB,
                                window_size = SMOOTHING_WINDOW_SIZE,
                                treble_window_size = TREBLE_SMOOTHING_WINDOW_SIZE,
-                               calibration = None,
+                               calibration = None, n_samplings = 1,
                                *args, **kwargs):
 
         fs, amps, _ = cls.probe(input_device_idx = input_device_idx, framerate = framerate,
                                 nchannels = nchannels, idx_channel = idx_channel,
                                 freq_lims = freq_lims,
                                 sensitivity_dB = sensitivity_dB, gain_dB = gain_dB,
+                                n_samplings = n_samplings,
                                 *args, **kwargs)
 
         fr_sample = FrequencyResponse('temp', fs, amps)
@@ -246,8 +260,10 @@ class Sampler:
 
 
     @classmethod
-    def get_spl(cls, input_device_idx, freq_lims = MEAN_SPL_FREQ_LIMITS, *args, **kwargs):
+    def get_spl(cls, input_device_idx, freq_lims = MEAN_SPL_FREQ_LIMITS, n_samplings = MEAN_SPL_N_SAMPLINGS,
+                *args, **kwargs):
         _, fr_smoothed = cls.get_frequency_response(input_device_idx = input_device_idx,
                                                     freq_lims = freq_lims,
+                                                    n_samplings = n_samplings,
                                                     *args, **kwargs)
         return fr_smoothed.raw.mean()
