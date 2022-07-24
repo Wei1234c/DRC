@@ -32,4 +32,6 @@
 # print(s)
 
 from drc.measurements.frequency import Octave
-print(Octave.get_octave_by_bands(5, 100, 10000))
+
+
+print(Octave.get_octave_by_bands(7, 100, 10000))
