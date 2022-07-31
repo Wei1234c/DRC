@@ -96,3 +96,8 @@ class EARS:
     def __init__(self):
         self.ears = {'left' : EAR(nchannels = self.N_CHANNELS, idx_channel = 0),
                      'right': EAR(nchannels = self.N_CHANNELS, idx_channel = 1)}
+
+
+    def load(self, calibration_files):
+        for channel in self.ears.keys():
+            self.ears[channel].load(calibration_files[channel])

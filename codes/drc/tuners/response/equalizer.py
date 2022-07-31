@@ -95,7 +95,7 @@ class ResponseEqualizer:
                                file_path,
                                fs = DEFAULT_FS,
                                f_res = DEFAULT_FREQ_RESOLUTION,
-                               linear_phase = False,
+                               linear_phase = True,
                                normalize = False,
                                nchannels = 2,
                                *auto_eq_args, **auto_eq_kwargs):

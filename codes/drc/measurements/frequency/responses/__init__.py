@@ -1,3 +1,5 @@
+import copy
+
 import numpy as np
 
 from autoeq import frequency_response
@@ -14,6 +16,11 @@ class FrequencyResponse(frequency_response.FrequencyResponse):
     # from : https://github.com/jaakkopasanen/AutoEq
 
     FREQUENCY_TO_CENTER = [100, 8000]
+
+
+    def __add__(self, other):
+        other.interpolate(f = self.frequency)
+        return FrequencyResponse('Sum of frequency responses', self.frequency, self.raw + other.raw)
 
 
     @classmethod
@@ -75,6 +82,10 @@ class Response:
         self.responses = [] if responses is None else responses
         self.columns = columns or f'\tHz\tMag (dB)\tdeg'
         self.field_sep = field_sep or ','
+
+
+    def copy(self):
+        return copy.deepcopy(self)
 
 
     @property

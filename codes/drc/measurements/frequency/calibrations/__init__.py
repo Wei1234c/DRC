@@ -66,9 +66,13 @@ class Microphone(Response):
 
 class Calibrator:
 
+    FREQUENCY_TO_CENTER = 1000
+
+
     @classmethod
-    def calibrate(cls, fr_measurement, fr_target,
+    def calibrate(cls, fr_measurement, fr_target, centered = True,
                   window_size = SMOOTHING_WINDOW_SIZE, treble_window_size = TREBLE_SMOOTHING_WINDOW_SIZE):
+
         fr_measurement = fr_measurement.get_smoothed(window_size, treble_window_size)
         fr_target = fr_target.get_smoothed(window_size, treble_window_size)
         fr_target.interpolate(f = fr_measurement.frequency)
@@ -80,7 +84,9 @@ class Calibrator:
         fr_calibration = FrequencyResponse('Calibration',
                                            fr_measurement.frequency,
                                            fr_measurement.error_smoothed)
-        fr_calibration.center(frequency = 1000)
+        if centered:
+            fr_calibration.center(frequency = cls.FREQUENCY_TO_CENTER)
+
         fr_calibration.interpolate()
 
         return fr_measurement, fr_calibration

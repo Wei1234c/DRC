@@ -252,9 +252,9 @@ class Sampler:
 
         if calibration is not None:
             calibration.interpolate(f = fr_smoothed.frequency)
-            fr_smoothed.raw -= calibration.raw
             fr_sample.raw -= calibration.raw
             fr_sample.smoothed -= calibration.raw
+            fr_smoothed.raw -= calibration.raw
 
         return fr_sample, fr_smoothed
 
