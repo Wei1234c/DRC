@@ -7,7 +7,7 @@ from ...sound import np, Sound, Streamer, SOUND_SPEED
 class DelayAligner:
     PROBE_RANGE = (0.5, 1.5)
     BINS = 51
-    CHUNK_SIZE = 1024 * 10
+    CHUNK_SIZE = 1024 * 16
     WAIT_BETWEEN_ms = 100
 
 

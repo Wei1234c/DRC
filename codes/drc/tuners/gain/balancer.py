@@ -10,7 +10,7 @@ class GainBalancer:
     GAIN_MUTE = 0.0
     GAIN_RANGE = (0.3, 1.0)
     BINS = 51
-    CHUNK_SIZE = 1024 * 10
+    CHUNK_SIZE = 1024 * 16
     WAIT_BETWEEN_ms = 100
     MEASURE_SPL_WAIT_BETWEEN_MS = 1000
 
